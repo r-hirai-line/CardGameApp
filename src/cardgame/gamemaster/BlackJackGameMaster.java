@@ -36,7 +36,6 @@ public class BlackJackGameMaster extends GameMaster {
 	 */
 	@Override
 	void cheackParam(String[] args) throws SystemErrorException {
-
 	}
 
 	/**
@@ -44,7 +43,7 @@ public class BlackJackGameMaster extends GameMaster {
 	 */
 	@Override
 	public void createCardList() {
-		this.deck = new BlackJackDeck();
+		deck = new BlackJackDeck();
 	}
 
 	/**
@@ -81,144 +80,60 @@ public class BlackJackGameMaster extends GameMaster {
 	 *
 	 */
 	@Override
-	void start() throws SystemErrorException {
+	public void start() throws SystemErrorException {
 		System.out.println("<< Welcome to Blackjack !! >>" + Consts.CRLF);
 
-		// ディーラーアクション
-		// カード表示
+		// ディーラーカード表示
 		openDealerCard();
 
 		// プレイヤーアクション
-		for (int i = 0; i < this.player.players.size(); i++) {
+		playerAction();
 
-			if (this.player.players.get(i).isCPU) {
-				// cpuAction();
-				System.out.println("<<" + player.players.get(i).name + "さんのturn ! >>" + Consts.CRLF);
+		// ディーラーアクション
+		dealerAction();
 
-				// 手札の確認
-				System.out.print("[" + player.players.get(i).name + "さん] ⇒ Hnad：");
-
-				for (int j = 0; j < this.player.players.get(i).hand.size(); j++) {
-					System.out.print(this.player.players.get(i).hand.get(j).suit + this.player.players.get(i).hand.get(j).rank + " ");
-				}
-
-				System.out.println(Consts.CRLF);
-
-				// 点数の確認
-				int result = 0;
-
-				for (int j = 0; j < this.player.players.get(i).hand.size(); j++) {
-					int val = BlackJackUtil.calcPoint(this.player.players.get(i).hand.get(j).num);
-					result += val;
-				}
-
-				this.player.players.get(i).score = result;
-				System.out.println("[" + player.players.get(i).name + "さん] ⇒ Score：" + this.player.players.get(i).score + Consts.CRLF);
-
-				boolean isContinue = false;
-
-				if (result < 17) {
-					isContinue = true;
-				}
-
-				while (isContinue) {
-					// カードを引く
-					this.player.players.get(i).hand.add((BlackJackCard) deck.pick());
-
-					// 引いたカードの確認
-					for (int j = this.player.players.get(i).hand.size() - 1; j < this.player.players.get(i).hand.size(); j++) {
-						System.out.println("[" + player.players.get(i).name + "さん] ⇒ [" + this.player.players.get(i).hand.get(j).suit + this.player.players.get(i).hand.get(j).rank + "]");
-					}
-
-					// 得点の確認
-					result = 0;
-
-					for (int j = 0; j < this.player.players.get(i).hand.size(); j++) {
-						int val = BlackJackUtil.calcPoint(this.player.players.get(i).hand.get(j).num);
-						result += val;
-					}
-
-					this.player.players.get(i).score = result;
-					System.out.println("[" + player.players.get(i).name + "さん] ⇒ Score：" + this.player.players.get(i).score + Consts.CRLF);
-
-					isContinue = false;
-
-					if (result < 17) {
-						isContinue = true;
-					}
-				}
-
-			} else {
-
-				System.out.println("<<" + player.players.get(i).name + "さんのturn ! >>" + Consts.CRLF);
-
-				// 手札の確認
-				System.out.print("[" + player.players.get(i).name + "さん] ⇒ Hnad：");
-
-				for (int j = 0; j < this.player.players.get(i).hand.size(); j++) {
-					System.out.print(this.player.players.get(i).hand.get(j).suit + this.player.players.get(i).hand.get(j).rank + " ");
-				}
-
-				System.out.println(Consts.CRLF);
-
-				// 点数の確認
-				int result = 0;
-
-				for (int j = 0; j < this.player.players.get(i).hand.size(); j++) {
-					int val = BlackJackUtil.calcPoint(this.player.players.get(i).hand.get(j).num);
-					result += val;
-				}
-
-				this.player.players.get(i).score = result;
-				System.out.println("[" + player.players.get(i).name + "さん] ⇒ Score：" + this.player.players.get(i).score + Consts.CRLF);
-
-				// ヒットかステイか選ぶ
-				String input = BlackJackUtil.getInputParam();
-				boolean isContinue = BlackJackUtil.isContinue(input);
-				while (isContinue) {
-					// カードを引く
-					this.player.players.get(i).hand.add((BlackJackCard) deck.pick());
-
-					// 引いたカードの確認
-					for (int j = this.player.players.get(i).hand.size() - 1; j < this.player.players.get(i).hand.size(); j++) {
-						System.out.println("[" + player.players.get(i).name + "さん] ⇒ [" + this.player.players.get(i).hand.get(j).suit + this.player.players.get(i).hand.get(j).rank + "]");
-					}
-
-					// 得点の確認
-					result = 0;
-
-					for (int j = 0; j < this.player.players.get(i).hand.size(); j++) {
-						int val = BlackJackUtil.calcPoint(this.player.players.get(i).hand.get(j).num);
-						result += val;
-					}
-
-					this.player.players.get(i).score = result;
-					System.out.println("[" + player.players.get(i).name + "さん] ⇒ Score：" + this.player.players.get(i).score + Consts.CRLF);
-
-					// // カードを引くかどうかの判定
-					input = BlackJackUtil.getInputParam();
-
-					// 継続か判定
-					isContinue = BlackJackUtil.isContinue(input);
-				}
-			}
-		}
+		// 勝敗判定
+		judg();
 	}
 
 	/**
-	 * 得点計算
-	 *
-	 * フィールドにプレイヤーの順番情報を持つ
+	 * 勝敗判定
 	 */
-	public void calc() {
+	public void judg() {
+		int dealerPoint = this.dealer.score;
 
-		int result = 0;
+		// ディーラーがバーストしていない場合
+		if (dealerPoint <= 21) {
+			for (int i = 0; i < this.player.players.size(); i++) {
 
-		for (int j = 0; j < this.player.players.get(0).hand.size(); j++) {
-			result += BlackJackUtil.calcPoint(this.player.players.get(j).hand.get(j).num);
+				if (this.player.players.get(i).score > 21) {
+					System.out.println(this.player.players.get(i).name + "バースト。乙。");
+				} else {
+					// 勝利
+					if (dealerPoint < this.player.players.get(i).score) {
+						System.out.println(this.player.players.get(i).name + "：勝ち");
+					}
+					// 敗北
+					else if (dealerPoint > this.player.players.get(i).score) {
+						System.out.println(this.player.players.get(i).name + "：はい！負け〜！！！");
+					}
+					// 引き分け
+					else {
+						System.out.println(this.player.players.get(i).name + "引き分け");
+					}
+				}
+			}
 		}
-
-		this.player.players.get(0).score = result;
+		// ディーラーがバーストしている場合
+		else {
+			for (int i = 0; i < this.player.players.size(); i++) {
+				if (this.player.players.get(i).score <= 21) {
+					System.out.println(this.player.players.get(i).name + "：勝ち");
+				} else {
+					System.out.println(this.player.players.get(i).name + "：はい！負け〜！！！");
+				}
+			}
+		}
 	}
 
 	/**
@@ -230,19 +145,225 @@ public class BlackJackGameMaster extends GameMaster {
 	}
 
 	/**
-	 * 手札表示
+	 * プレイヤーアクション
+	 *
+	 * @throws SystemErrorException
 	 */
-	public void openHand() {
+	public void playerAction() throws SystemErrorException {
+
 		for (int i = 0; i < this.player.players.size(); i++) {
 
-			System.out.println("[" + player.players.get(i).name + "さん] ⇒ Hnad：");
+			// 開始宣言
+			showPlayerInfo(i);
 
-			for (int j = 0; j < this.player.players.get(i).hand.size(); j++) {
-				System.out.print(this.player.players.get(i).hand.get(j).suit + this.player.players.get(i).hand.get(j).rank + " ");
+			// 手札の確認
+			checkHand(i);
+
+			// 点数の確認
+			calcSum(i);
+
+			if (this.player.players.get(i).isCPU) {
+
+				// CPUアルゴリズム
+				cpuAI(i);
+			} else {
+
+				// ヒットかステイか選ぶ
+				chooseHitOrStay(i);
 			}
 
-			System.out.println(Consts.CRLF);
 		}
 	}
 
+	/**
+	 * 誰のターンかを宣言する
+	 *
+	 * @param i
+	 */
+	public void showPlayerInfo(int i) {
+
+		System.out.println("<<" + player.players.get(i).name + "のturn ! >>" + Consts.CRLF);
+	}
+
+	/**
+	 * 手札確認
+	 *
+	 * @param i
+	 */
+	public void checkHand(int i) {
+		System.out.print("[" + player.players.get(i).name + "] ⇒ Hnad：");
+
+		for (int j = 0; j < this.player.players.get(i).hand.size(); j++) {
+			System.out.print(this.player.players.get(i).hand.get(j).suit + this.player.players.get(i).hand.get(j).rank + " ");
+		}
+
+		System.out.println(Consts.CRLF);
+	}
+
+	/**
+	 * 得点確認
+	 *
+	 * @param i
+	 */
+	public void calcSum(int i) {
+
+		int result = 0;
+
+		for (int j = 0; j < this.player.players.get(i).hand.size(); j++) {
+			int val = BlackJackUtil.calcPoint(this.player.players.get(i).hand.get(j).num);
+			result += val;
+		}
+
+		this.player.players.get(i).score = result;
+
+		System.out.println("[" + player.players.get(i).name + "] ⇒ Score：" + this.player.players.get(i).score + Consts.CRLF);
+	}
+
+	/**
+	 * ヒットかステイか選択
+	 *
+	 * @param i
+	 * @throws SystemErrorException
+	 */
+	public void chooseHitOrStay(int i) throws SystemErrorException {
+
+		// ヒットかステーか入力を受け付ける
+		String input = BlackJackUtil.getInputParam();
+
+		boolean isContinue = BlackJackUtil.isContinue(input);
+
+		while (isContinue) {
+
+			// カードを引く
+			pickCard(i);
+
+			// 引いたカードの確認
+			checkPickCard(i);
+
+			// 得点の確認
+			calcSum(i);
+
+			// // カードを引くかどうかの判定
+			input = BlackJackUtil.getInputParam();
+
+			// 継続か判定
+			isContinue = BlackJackUtil.isContinue(input);
+		}
+	}
+
+	/**
+	 * CPUアルゴリズム
+	 *
+	 * @param result
+	 * @param i
+	 */
+	public void cpuAI(int i) {
+
+		int result = this.player.players.get(i).score;
+
+		boolean isContinue = false;
+
+		if (result < 17) {
+			isContinue = true;
+		}
+
+		while (isContinue) {
+
+			// カードを引く
+			pickCard(i);
+
+			// 引いたカードの確認
+			checkPickCard(i);
+
+			// 得点の確認
+			calcSum(i);
+
+			if (this.player.players.get(i).score >= 17) {
+				isContinue = false;
+			}
+		}
+	}
+
+	/**
+	 * カードを一枚引く
+	 *
+	 * @param i
+	 */
+	private void pickCard(int i) {
+
+		this.player.players.get(i).hand.add((BlackJackCard) deck.pick());
+	}
+
+	/**
+	 * 引いたカードの確認
+	 *
+	 * @param i
+	 */
+	private void checkPickCard(int i) {
+
+		for (int j = this.player.players.get(i).hand.size() - 1; j < this.player.players.get(i).hand.size(); j++) {
+			System.out.println("[" + player.players.get(i).name + "] ⇒ [" + this.player.players.get(i).hand.get(j).suit + this.player.players.get(i).hand.get(j).rank + "]");
+		}
+	}
+
+	/**
+	 * ディーラーアクション
+	 */
+	public void dealerAction() {
+
+		// 手札の確認
+		System.out.print("[ Dealer ] ⇒ Hnad：");
+
+		for (int j = 0; j < this.dealer.hand.size(); j++) {
+			System.out.print(this.dealer.hand.get(j).suit + this.dealer.hand.get(j).rank + " ");
+		}
+
+		System.out.println(Consts.CRLF);
+
+		// 点数計算
+		calcDealerSum();
+
+		boolean isContinue = false;
+
+		if (this.dealer.score < 17) {
+			isContinue = true;
+		}
+
+		while (isContinue) {
+
+			// カードを引く
+			this.dealer.hand.add((BlackJackCard) deck.pick());
+
+			// 引いたカードの確認
+			for (int j = this.dealer.hand.size() - 1; j < this.dealer.hand.size(); j++) {
+				System.out.println("[ Dealer ] ⇒ [" + this.dealer.hand.get(j).suit + this.dealer.hand.get(j).rank + "]");
+			}
+
+			// 得点計算
+			calcDealerSum();
+
+			if (this.dealer.score >= 17) {
+				isContinue = false;
+			}
+		}
+	}
+
+	/**
+	 * 得点計算
+	 *
+	 * @param i
+	 */
+	public void calcDealerSum() {
+
+		int result = 0;
+
+		for (int j = 0; j < this.dealer.hand.size(); j++) {
+			int val = BlackJackUtil.calcPoint(this.dealer.hand.get(j).num);
+			result += val;
+		}
+
+		this.dealer.score = result;
+
+		System.out.println("[ Dealer ] ⇒ Score：" + this.dealer.score + Consts.CRLF);
+	}
 }

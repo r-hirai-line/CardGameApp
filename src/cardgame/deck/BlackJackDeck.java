@@ -17,11 +17,6 @@ import cardgame.card.Card;
 public class BlackJackDeck extends Deck {
 
 	/**
-	 * 山札
-	 */
-	public List<Card> deck;
-
-	/**
 	 * コンストラクタ
 	 */
 	public BlackJackDeck() {
@@ -63,7 +58,7 @@ public class BlackJackDeck extends Deck {
 	 */
 	public void createSuit(String suit) {
 		for (int i = 1; i <= 13; i++) {
-			BlackJackCard card = new BlackJackCard();
+			Card card = new BlackJackCard();
 			card.num = i;
 			card.suit = suit;
 			card.rank = Consts.numRankMap.get(i);

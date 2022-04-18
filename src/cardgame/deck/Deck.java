@@ -1,5 +1,7 @@
 package cardgame.deck;
 
+import java.util.List;
+
 import cardgame.card.Card;
 
 /**
@@ -11,6 +13,11 @@ import cardgame.card.Card;
  *
  */
 public abstract class Deck {
+
+	/**
+	 * 山札
+	 */
+	public List<Card> deck;
 
 	/**
 	 * 山札作成

@@ -38,8 +38,8 @@ public class CardGame {
 		} else {
 
 			System.out.println("ゲーム種目番号を確認して下さい。");
-			System.out.println("ブラックジャック：1");
-			System.out.println("大富豪：2");
+			System.out.println("ブラックジャック：001");
+			System.out.println("大富豪：002");
 		}
 
 		// ゲーム開始

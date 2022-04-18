@@ -90,7 +90,7 @@ public abstract class GameMaster {
 	abstract void createPlayer();
 
 	/**
-	 * 手札を配る
+	 * カード分配
 	 */
 	abstract void distribute();
 
