@@ -1,10 +1,9 @@
 package cardgame.deck;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import cardgame.Consts;
+import cardgame.bean.GameMasterBean;
 import cardgame.card.BlackJackCard;
 import cardgame.card.Card;
 
@@ -17,13 +16,17 @@ import cardgame.card.Card;
 public class BlackJackDeck extends Deck {
 
 	/**
-	 * コンストラクタ
+	 * GameMasterBean
 	 */
-	public BlackJackDeck() {
+	GameMasterBean gameMasterBean;
 
-		// 山札生成
-		this.deck = new ArrayList<>();
-
+	/**
+	 * コンストラクタ
+	 *
+	 * @param gameMasterBean
+	 */
+	public BlackJackDeck(GameMasterBean gameMasterBean) {
+		this.gameMasterBean = gameMasterBean;
 		// 山札作成
 		build();
 	}
@@ -32,6 +35,8 @@ public class BlackJackDeck extends Deck {
 	 * 山札作成
 	 */
 	public void build() {
+
+		// GameMasterBeanにセットしたい
 
 		// ♠︎を作成
 		createSuit(Consts.SPADE);
@@ -46,7 +51,7 @@ public class BlackJackDeck extends Deck {
 		createSuit(Consts.DAIYA);
 
 		// Jocker︎を作成
-		createJocker(Consts.TWO_JOCKER);
+		// createJocker(Consts.TWO_JOCKER);
 
 		shuffle();
 	}
@@ -59,10 +64,10 @@ public class BlackJackDeck extends Deck {
 	public void createSuit(String suit) {
 		for (int i = 1; i <= 13; i++) {
 			Card card = new BlackJackCard();
-			card.num = i;
-			card.suit = suit;
-			card.rank = Consts.numRankMap.get(i);
-			this.deck.add(card);
+			card.setNum(i);
+			card.setSuit(suit);
+			card.setRank(Consts.numRankMap.get(i));
+			gameMasterBean.setDeck(card);
 		}
 	}
 
@@ -74,10 +79,10 @@ public class BlackJackDeck extends Deck {
 	public void createJocker(int count) {
 		for (int i = 0; i < count; i++) {
 			BlackJackCard card = new BlackJackCard();
-			card.num = 0;
-			card.suit = "Jocker";
-			card.rank = Consts.numRankMap.get(0);
-			this.deck.add(card);
+			card.setNum(0);
+			card.setSuit("Jocker");
+			card.setRank(Consts.numRankMap.get(0));
+			gameMasterBean.setDeck(card);
 		}
 	}
 
@@ -87,29 +92,20 @@ public class BlackJackDeck extends Deck {
 	 * @return
 	 */
 	public void shuffle() {
-		Collections.shuffle(this.deck);
+		Collections.shuffle(gameMasterBean.getDeck());
 	}
 
 	/**
-	 * デッキの先頭からカードを一枚取り出す
+	 * デッキの先頭からカードを一枚取り出す（共通にすべき）
 	 */
 	public Card pick() {
 
 		// デッキの先頭からカードを一枚取り出す
-		BlackJackCard card = (BlackJackCard) this.deck.get(0);
+		BlackJackCard card = (BlackJackCard) gameMasterBean.getDeck().get(0);
 
-		// デッキからカードを一枚削除する
-		this.deck.remove(0);
+		// 山札からカードを一枚削除する
+		gameMasterBean.getDeck().remove(0);
 
 		return card;
-	}
-
-	/**
-	 * getter
-	 *
-	 * @return
-	 */
-	public List<Card> getDeck() {
-		return deck;
 	}
 }

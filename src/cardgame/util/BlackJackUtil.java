@@ -3,8 +3,10 @@ package cardgame.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import cardgame.Consts;
+import cardgame.card.Card;
 import cardgame.exception.SystemErrorException;
 
 /**
@@ -42,9 +44,10 @@ public class BlackJackUtil {
 	 */
 	public static boolean isCorrectInput(String input) {
 
-		if ("h".equals(input) || "s".equals(input)) {
+		if ("h".equals(input) || "s".equals(input) || "cheat".equals(input)) {
 			return true;
 		}
+
 		return false;
 	}
 
@@ -83,22 +86,6 @@ public class BlackJackUtil {
 		return input;
 	}
 
-	/**
-	 *
-	 * @param input
-	 * @return
-	 */
-	public static boolean isContinue(String input) {
-
-		boolean isContinue = false;
-
-		// Hitの場合、isContinueをtrueに変更
-		if ("h".equals(input)) {
-			isContinue = true;
-		}
-		return isContinue;
-	}
-
 	public static int calcPoint(int num) {
 
 		int val = num;
@@ -109,5 +96,32 @@ public class BlackJackUtil {
 		}
 
 		return val;
+	}
+
+	/**
+	 * バースト確率を返却（未実装）
+	 *
+	 * @param score
+	 * @param deck
+	 * @return
+	 */
+	public static double calcProbability(List<Card> deck, int score) {
+
+		// バーストまでの得点
+		int forgiveNum = 21 - score;
+
+		// 引いても大丈夫な数の枚数
+		int butstCard = 0;
+		for (Card card : deck) {
+			if (card.getNum() > forgiveNum) {
+				butstCard++;
+			}
+		}
+
+		// 確率計算
+		double probability = Double.valueOf(butstCard) / Double.valueOf(deck.size()) * 100;
+
+		return probability;
+
 	}
 }

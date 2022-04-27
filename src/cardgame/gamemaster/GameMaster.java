@@ -2,6 +2,8 @@ package cardgame.gamemaster;
 
 import java.util.List;
 
+import cardgame.bean.GameMasterBean;
+import cardgame.deck.Deck;
 import cardgame.exception.SystemErrorException;
 import cardgame.player.Player;
 
@@ -16,6 +18,16 @@ import cardgame.player.Player;
 public abstract class GameMaster {
 
 	/**
+	 * 山札クラス
+	 */
+	public Deck deck;
+
+	/**
+	 * GameMasterBean
+	 */
+	public GameMasterBean gameMasterBean;
+
+	/**
 	 * プレイヤー人数
 	 */
 	public int players;
@@ -27,7 +39,7 @@ public abstract class GameMaster {
 
 	/**
 	 *
-	 * 全ゲームの共通実行処理
+	 * 全ゲームの共通処理
 	 *
 	 * @param args
 	 * @throws SystemErrorException
@@ -37,12 +49,10 @@ public abstract class GameMaster {
 
 		try {
 			// パラメータチェック
-			cheackParam(args);
+			// cheackParam(args);
 
 			// 初期処理
 			init();
-
-			// confirm();
 
 			// ゲーム開始
 			start();
@@ -58,6 +68,8 @@ public abstract class GameMaster {
 	 * @param
 	 */
 	public void init() {
+
+		gameMasterBean = new GameMasterBean();
 
 		// 山札作成
 		createCardList();
@@ -75,7 +87,7 @@ public abstract class GameMaster {
 	 * @param args
 	 * @throws SystemErrorException
 	 */
-	abstract void cheackParam(String[] args) throws SystemErrorException;
+	// abstract void cheackParam(String[] args) throws SystemErrorException;
 
 	/**
 	 * 山札作成
